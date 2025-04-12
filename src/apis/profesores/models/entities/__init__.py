@@ -1,7 +1,7 @@
 from utils.DateFormat import DateFormat
 
 class Profesor:
-    def _init_(self, id_profesor, nombre, apellido, especialidad, telefono, email,documento_identidad):
+    def __init__(self, id_profesor, nombre, apellido, especialidad, telefono, email,documento_identidad):
         self.id_profesor = id_profesor
         self.nombre = nombre
         self.apellido = apellido
@@ -16,7 +16,7 @@ class Profesor:
             "id_profesor": self.id_profesor,
             "nombre": self.nombre,
             "apellido": self.apellido,
-            "dui": self.dui,
+            "dui": self.documento_identidad,
             "especialidad": self.especialidad,
             "telefono": self.telefono,
             "email": self.email,

@@ -33,6 +33,7 @@ def add_materia():
         data = request.get_json()
         required_fields = ['nombre', 'descripcion']
         missing_fields = [field for field in required_fields if field not in data]
+        
         if missing_fields:
             return jsonify({"error": f"Faltan campos obligatorios: {', '.join(missing_fields)}"}), 400
 

@@ -5,8 +5,8 @@ class Periodo:
     def __init__(self, id_periodo, nombre, fecha_inicio, fecha_finalizacion):
         self.id_periodo = id_periodo
         self.nombre = nombre
-        self.fecha_inicio = DateFormat.convert_date(fecha_inicio)
-        self.fecha_finalizacion = DateFormat.convert_date(fecha_finalizacion)
+        self.fecha_inicio = fecha_inicio
+        self.fecha_finalizacion = fecha_finalizacion
     
     def to_json(self):
         return {

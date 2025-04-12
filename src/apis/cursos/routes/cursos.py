@@ -47,7 +47,7 @@ def add_cursos():
             estado=data.get('estado'),
             id_periodo=data.get('id_periodo'),
         )
-        cursosModel.add_cursos(curso)
+        cursosModel.add_curso(curso)
 
         return jsonify({"message": "curso agregado", "id": curso_id}), 201
 
@@ -74,7 +74,7 @@ def update_cursos(id):
             estado=data.get('estado'),
             id_periodo=data.get('id_periodo'),
         )
-        affected_rows = cursosModel.update_cursos(curso)
+        affected_rows = cursosModel.update_curso(curso)
         if affected_rows == 1:
             return jsonify({"message": "curso actualizado correctamente"}), 200
         else:

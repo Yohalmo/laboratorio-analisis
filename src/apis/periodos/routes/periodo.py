@@ -33,8 +33,9 @@ def add_periodo():
             return jsonify({'error': 'Faltan campos requeridos'}), 400
         
         # Validación de fechas
-        fecha_inicio = datetime.strptime(data['fecha_inicio'], '%Y-%m-%d')
-        fecha_fin = datetime.strptime(data['fecha_finalizacion'], '%Y-%m-%d')
+        
+        fecha_inicio = datetime.strptime(data.get('fecha_inicio'), '%Y-%m-%d')
+        fecha_fin = datetime.strptime(data.get('fecha_finalizacion'), '%Y-%m-%d')
         
         if fecha_inicio >= fecha_fin:
             return jsonify({'error': 'Fecha inicio debe ser anterior a fecha finalización'}), 400
