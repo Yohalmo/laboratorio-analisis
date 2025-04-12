@@ -8,6 +8,17 @@ from datetime import datetime
 
 main = Blueprint('cursos_blueprint', __name__)
 
+@main.route('/', methods=['GET'])
+def get_cursos():
+    try:
+        curso = cursosModel.get_all_cursos()
+        if curso:
+            return jsonify(curso)
+        else:
+            return jsonify({"error": "No se encontraron registros"}), 404
+    except Exception as ex:
+        return jsonify({"error": str(ex)}), 500
+
 @main.route('/<id>', methods=['GET'])
 def get_cursos_by_id(id):
     try:

@@ -5,6 +5,17 @@ from ..models.entities.materias import Materias
 
 main = Blueprint('materias_blueprint', __name__)
 
+@main.route('/', methods=['GET'])
+def get_materiaS():
+    try:
+        materia = MateriasModel.get_all_materias()
+        if materia:
+            return jsonify(materia)
+        else:
+            return jsonify({"error": "Materia no encontrada"}), 404
+    except Exception as ex:
+        return jsonify({"error": str(ex)}), 500
+
 @main.route('/<id>', methods=['GET'])
 def get_materia_by_id(id):
     try:

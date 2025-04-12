@@ -6,6 +6,17 @@ from ..models.entities.motivos_ausencia import MotivoAusencia
 
 main = Blueprint('motivos_ausencia_blueprint', __name__)
 
+@main.route('/', methods=['GET'])
+def get_motivoS():
+    try:
+        motivo = MotivoAusenciaModel.get_all_motivos()
+        if motivo:
+            return jsonify(motivo)
+        else:
+            return jsonify({"error": "Motivo no encontrado"}), 404
+    except Exception as ex:
+        return jsonify({"error": str(ex)}), 500
+
 @main.route('/<id>', methods=['GET'])
 def get_motivo_by_id(id):
     try:

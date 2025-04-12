@@ -22,7 +22,8 @@ class MateriasModel:
                         nombre=row[1],
                         descripcion=row[2]
                     )
-                    materias_list.append(materia)
+                    materias_list.append(materia.to_JSON())
+            connection.close()
             return materias_list
         except Exception as e:
             print(f"Error al obtener las materias: {e}")

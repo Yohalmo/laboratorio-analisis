@@ -20,7 +20,8 @@ class MotivoAusenciaModel:
                         id_motivo=row[0],
                         descripcion=row[1]
                     )
-                    motivos_list.append(motivo)
+                    motivos_list.append(motivo.to_JSON())
+            connection.close()
             return motivos_list
         except Exception as e:
             print(f"Error al obtener los motivos: {e}")

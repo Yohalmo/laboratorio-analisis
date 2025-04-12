@@ -24,7 +24,8 @@ class cursosModel:
                         estado=row[3],
                         id_periodo=row[4]
                     )
-                    cursos_list.append(curso)
+                    cursos_list.append(curso.to_JSON())
+            connection.close()
             return cursos_list
         except Exception as e:
             print(f"Error al obtener los cursos: {e}")
