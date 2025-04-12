@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 import uuid
 from datetime import datetime
 from ..models.periodomodelos import PeriodoModel
-from .periodo import Periodo
+from ..models.entities.periodos import Periodo
 main = Blueprint('periodo_blueprint', __name__)
 
 @main.route('/', methods=['GET'])

@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 import uuid
-from ..routes.salones import Salon
-from ..routes.salones import SalonModel
+from ..models.entities.salones import Salon
+from ..models.entities.salonesmodelo import SalonModel
 
 main = Blueprint('salon_blueprint', __name__)
 

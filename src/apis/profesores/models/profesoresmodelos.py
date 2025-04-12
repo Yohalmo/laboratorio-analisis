@@ -11,10 +11,10 @@ class ProfesorModel:
             
             with connection.cursor() as cursor:
                 cursor.execute("""
-                    SELECT id_profesor, nombre, apellido, especialidad, 
-                           telefono, email, documento_identidad
+                    SELECT id_profesor, nombres, apellidos, especialidad, 
+                           telefono, email, documento_identificacion
                     FROM profesores
-                    ORDER BY apellido, nombre ASC
+                    ORDER BY apellidos, nombres ASC
                 """)
                 resultset = cursor.fetchall()
                 
@@ -37,8 +37,8 @@ class ProfesorModel:
             
             with connection.cursor() as cursor:
                 cursor.execute("""
-                    SELECT id_profesor, nombre, apellido, especialidad, 
-                           telefono, email, documento_identidad
+                    SELECT id_profesor, nombres, apellidos, especialidad, 
+                           telefono, email, documento_identificacion
                     FROM profesores 
                     WHERE id_profesor = %s
                 """, (id_profesor,))
@@ -64,9 +64,9 @@ class ProfesorModel:
             
             with connection.cursor() as cursor:
                 cursor.execute("""
-                    INSERT INTO profesores (id_profesor, nombre, apellido, 
+                    INSERT INTO profesores (id_profesor, nombres, apellidos, 
                                           especialidad, telefono, email, 
-                                          documento_identidad)
+                                          documento_identificacion)
                     VALUES (%s, %s, %s, %s, %s, %s, %s)
                 """, (
                     profesor.id_profesor, profesor.nombre, profesor.apellido,
@@ -89,8 +89,8 @@ class ProfesorModel:
             with connection.cursor() as cursor:
                 cursor.execute("""
                     UPDATE profesores 
-                    SET nombre = %s, apellido = %s, especialidad = %s,
-                        telefono = %s, email = %s, documento_identidad = %s
+                    SET nombres = %s, apellidos = %s, especialidad = %s,
+                        telefono = %s, email = %s, documento_identificacion = %s
                     WHERE id_profesor = %s
                 """, (
                     profesor.nombre, profesor.apellido, profesor.especialidad,

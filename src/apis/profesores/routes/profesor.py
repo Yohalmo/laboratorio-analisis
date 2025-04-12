@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 import uuid
-from ..routes.profesor import Profesor
-from ..routes.profesor import ProfesorModel
+from ..models.entities import Profesor
+from ..models.profesoresmodelos import ProfesorModel
 
 main = Blueprint('profesor_blueprint',__name__)
 
