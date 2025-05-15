@@ -11,9 +11,9 @@ class cursosModel:
             cursos_list = []
             with connection.cursor() as cursor:
                 cursor.execute("""
-                    SELECT id_curso, nombre, descripcion, estado, id_periodo
-                    FROM cursos
-                    ORDER BY nombre ASC
+                    SELECT id_curso, c.nombre, c.descripcion, c.estado, p.nombre as nombre_periodo
+                    FROM cursos c inner join periodos p on p.id_periodo = c.id_periodo
+                    ORDER BY c.nombre ASC
                 """)
                 result = cursor.fetchall()
                 for row in result:
@@ -22,7 +22,8 @@ class cursosModel:
                         nombre=row[1],
                         descripcion=row[2],
                         estado=row[3],
-                        id_periodo=row[4]
+                        id_periodo='',
+                        nombre_periodo=row[4]
                     )
                     cursos_list.append(curso.to_JSON())
             connection.close()

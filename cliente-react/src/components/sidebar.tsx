@@ -32,6 +32,27 @@ export default function Sidebar() {
         >
           Reportes
         </NavLink>
+
+        <NavLink
+          to="/cursos"
+          className={({ isActive }) => `nav-link ${isActive ? 'active bg-primary text-white' : 'text-dark'} text-decoration-none py-2 px-3 rounded`}
+        >
+          Cursos
+        </NavLink>
+
+        <NavLink
+          to="/materias"
+          className={({ isActive }) => `nav-link ${isActive ? 'active bg-primary text-white' : 'text-dark'} text-decoration-none py-2 px-3 rounded`}
+        >
+          Materias
+        </NavLink>
+
+        <NavLink
+          to="/motivos-ausencia"
+          className={({ isActive }) => `nav-link ${isActive ? 'active bg-primary text-white' : 'text-dark'} text-decoration-none py-2 px-3 rounded`}
+        >
+          Motivos Ausencia
+        </NavLink>
       </nav>
     </aside>
   );

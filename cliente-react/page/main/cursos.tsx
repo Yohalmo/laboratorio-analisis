@@ -7,7 +7,7 @@ interface Curso {
     nombre: string;
     descripcion: string;
     estado: boolean;
-    id_periodo: number;
+    nombre_periodo: string;
 }
 
 interface CursosProps {
@@ -61,7 +61,7 @@ export default function Cursos() {
                             <th>Nombre</th>
                             <th>Descripción</th>
                             <th>Estado</th>
-                            <th>ID Período</th>
+                            <th>Período</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -76,7 +76,7 @@ export default function Cursos() {
                                             {e.estado ? 'Activo' : 'Inactivo'}
                                         </span>
                                     </td>
-                                    <td>{e.id_periodo}</td>
+                                    <td>{e.nombre_periodo}</td>
                                 </tr>
                             ))
                         ) : (
