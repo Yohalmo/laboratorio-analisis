@@ -2,18 +2,6 @@ import { useState, useEffect } from "react";
 import { useMaterias } from "../../src/hook/useMaterias";
 import Paginador from '../../src/components/paginador';
 
-interface Materia {
-    id_materia: number;
-    nombre: string;
-    descripcion: string;
-}
-
-interface MateriasProps {
-    materias: Materia[];
-    loading: boolean;
-    error: string | null;
-}
-
 export default function Materias() {
     const { materias, loading, error } = useMaterias();
 

@@ -2,21 +2,6 @@ import { useState, useEffect } from "react";
 import { useAsistencias } from "../../src/hook/useAsistencias";
 import Paginador from '../../src/components/paginador';
 
-interface Asistencia {
-    alumno:string;
-    estado: string;
-    fecha: string;
-    id_asistencia: string;
-    materia: string;
-    motivo: string;
-}
-
-interface AsistenciasProps {
-    asistencias: Asistencia[],
-    loading: boolean,
-    error: string | null;
-}
-
 export default function Asistencias() {
 
     const { asistencias, loading, error } = useAsistencias();

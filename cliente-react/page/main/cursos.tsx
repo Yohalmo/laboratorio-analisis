@@ -2,20 +2,6 @@ import { useState, useEffect } from "react";
 import { useCursos } from "../../src/hook/useCursos";
 import Paginador from '../../src/components/paginador';
 
-interface Curso {
-    id_curso: number;
-    nombre: string;
-    descripcion: string;
-    estado: boolean;
-    nombre_periodo: string;
-}
-
-interface CursosProps {
-    cursos: Curso[];
-    loading: boolean;
-    error: string | null;
-}
-
 export default function Cursos() {
     const { cursos, loading, error } = useCursos();
 

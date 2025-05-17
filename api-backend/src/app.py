@@ -6,6 +6,7 @@ app = Flask(__name__)
 CORS(app)
 
 from apis.alumnos.routes import Alumno
+from apis.dashboard.routes import Dashboard
 from apis.asistencias.routes import Asistencia
 from apis.reportes.routes import Reporte
 from apis.notificaciones.routes import Notificacion
@@ -31,5 +32,6 @@ if __name__ == "__main__":
 
     app.register_blueprint(cursos.main, url_prefix="/api/cursos")
     app.register_blueprint(materias.main, url_prefix="/api/materias")
+    app.register_blueprint(Dashboard.main, url_prefix="/api/dashboard")
     app.register_blueprint(motivos_ausencia.main, url_prefix="/api/motivos_ausencia")
     app.run(host="0.0.0.0", port="5000", debug=True)

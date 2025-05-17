@@ -1,15 +1,10 @@
 import { fetchCliente } from './fetchCliente';
-import type { DashboardStats, Alumno} from '../src/types';
+import type { DashboardStats} from '../src/types';
 
-export const getDashboardStats = async (): Promise<DashboardStats> => {
-    const [alumnos] = await Promise.all([
-        fetchCliente<{ count: number }>('/api/alumnos/count'),
-  
+export const getDashboardStatus = async (): Promise<DashboardStats> => {
+    const [totales] = await Promise.all([
+        fetchCliente<DashboardStats>('/api/dashboard'),
     ]);
-    return { 
-        alumnos: alumnos.count
-    };
-};
 
-export const getLastAlumnos = (): Promise<Alumno[]> => 
-    fetchCliente<Alumno[]>('/api/alumnos?limit=5&order=desc');
+    return totales;
+};

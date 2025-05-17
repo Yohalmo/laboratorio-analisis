@@ -1,37 +1,39 @@
 interface TablaResumenProps {
+    title: string;
     data: any[];
-    type: 'alumnos' ;
 }
 
-export default function TablaResumen({ data, type }: TablaResumenProps) {
-    if (!data?.length) return <p className="text-muted">No hay registros recientes</p>;
-
+export default function TablaResumen({ title, data }: TablaResumenProps) {
     return (
-        <table className="table table-bordered">
-            <thead>
-                <tr>
-                    {type === 'alumnos' && (
-                        <>
-                            <th>Nombre</th>
-                            <th>Email</th>
-                        </>
-                    )}
-                   
-                </tr>
-            </thead>
-            <tbody>
-                {data.map((item) => (
-                    <tr key={item.id}>
-                        {type === 'alumnos' && (
-                            <>
-                                <td>{`${item.nombres} ${item.apellidos}`}</td>
-                                <td>{item.email}</td>
-                            </>
-                        )}
-                    
-                    </tr>
-                ))}
-            </tbody>
-        </table>
+        <div className="mb-3 col-xl-6 col-md-6 col-sm-12">
+            <div className="card">
+                <div className="card-body">
+                    <h4 className="mb-3">{title}</h4>
+
+                    <table className="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data?.length ? (
+                                data.map((item) => (
+                                    <tr key={item.id_registro}>
+                                        <td>{ item.field_registro}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={2}>
+                                        <p className="text-muted text-center">No hay registros recientes</p>
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     );
 }

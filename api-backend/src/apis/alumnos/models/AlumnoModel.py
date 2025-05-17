@@ -3,7 +3,7 @@ from ..models.entities.Alumno import Alumno
 
 class AlumnoModel():
     @classmethod
-    def get_all(cls, limit):
+    def get_all(cls):
         try:
             connection = get_connection()
             lista_alumnos = []
@@ -11,12 +11,8 @@ class AlumnoModel():
             with connection.cursor() as cursor:
                 query = """
                             select id_alumno, nombres, apellidos, fecha_nacimiento, 
-                               direccion, telefono, email from alumnos order by 
+                               direccion, telefono, email from alumnos order by nombres
                                """
-                if limit != 0:
-                    query += " created_at desc limit 5"
-                else:
-                    query += " nombres "
 
                 cursor.execute(query)
                 resultados = cursor.fetchall()
@@ -125,23 +121,6 @@ class AlumnoModel():
 
         except Exception as ex:
             raise Exception(ex)
-        
-    @classmethod
-    def count_alumnos(cls):
-        try:
-            connection = get_connection()
-            total = 0
 
-            with connection.cursor() as cursor:
-                cursor.execute("""
-                            select count(*) as total from alumnos 
-                               """)
-                row = cursor.fetchone()
-                total = row[0]
-            connection.close()
-
-            return total
-        except Exception as ex:
-            raise Exception(ex)
         
         

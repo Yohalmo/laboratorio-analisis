@@ -9,8 +9,7 @@ main = Blueprint('alumno_blueprint', __name__)
 @main.route("/", methods=['GET'])
 def get_alumnos():
     try:
-        limit = request.args.get('limit', default=0, type=int)
-        alumnos = AlumnoModel.get_all(limit)
+        alumnos = AlumnoModel.get_all()
         
         if alumnos:
             return jsonify(alumnos), 200

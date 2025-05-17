@@ -2,14 +2,6 @@ import { useState, useEffect } from "react";
 import { useReportes } from "../../src/hook/useReportes";
 import Paginador from '../../src/components/paginador';
 
-interface Reporte {
-    alumno:string;
-    fecha: string;
-    id_reporte: string;
-    observaciones: string;
-    periodo: string;
-}
-
 export default function Reportes() {
 
     const { reportes, loading, error } = useReportes();

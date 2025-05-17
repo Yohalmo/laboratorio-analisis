@@ -2,16 +2,6 @@ import { useState, useEffect } from "react";
 import { useProfesores } from "../../src/hook/useProfesores";
 import Paginador from '../../src/components/paginador';
 
-interface Profesor {
-    id_profesor: number;
-    nombre: string;
-    apellido: string;
-    especialidad: string;
-    telefono: string;
-    email: string;
-    documento_identidad: string;
-}
-
 export default function Profesores() {
     const { profesores, loading, error } = useProfesores();
 

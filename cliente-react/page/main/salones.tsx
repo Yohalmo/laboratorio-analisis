@@ -2,14 +2,6 @@ import { useState, useEffect } from "react";
 import { useSalones } from "../../src/hook/useSalones";
 import Paginador from '../../src/components/paginador';
 
-interface Salon {
-    id_salon: number;
-    nombre: string;
-    capacidad: number;
-    ubicacion: string;
-    observaciones: string;
-}
-
 export default function Salones() {
     const { salones, loading, error } = useSalones();
 

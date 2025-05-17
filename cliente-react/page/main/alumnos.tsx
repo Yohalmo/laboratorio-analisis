@@ -2,22 +2,6 @@ import { useState, useEffect } from "react";
 import { useAlumnos } from "../../src/hook/useAlumnos";
 import Paginador from '../../src/components/paginador';
 
-interface Alumno {
-    id_alumno: Number,
-    nombres: String,
-    apellidos: String,
-    fecha_nacimiento: string
-    direccion: String,
-    telefono: String,
-    email: String,
-}
-
-interface AlumnosProps {
-    alumnos: Alumno[],
-    loading: boolean,
-    error: string | null;
-}
-
 export default function Alumnos() {
 
     const { alumnos, loading, error } = useAlumnos();

@@ -2,13 +2,6 @@ import { useState, useEffect } from "react";
 import { usePeriodos } from "../../src/hook/usePeriodos";
 import Paginador from '../../src/components/paginador';
 
-interface Periodo {
-    id_periodo: number;
-    nombre: string;
-    fecha_inicio: string;
-    fecha_finalizacion: string;
-}
-
 export default function Periodos() {
     const { periodos, loading, error } = usePeriodos();
 

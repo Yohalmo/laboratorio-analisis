@@ -2,17 +2,6 @@ import { useState, useEffect } from "react";
 import { useMotivosAusencia } from "../../src/hook/useMotivosAusencia";
 import Paginador from '../../src/components/paginador';
 
-interface MotivoAusencia {
-    id_motivo: number;
-    descripcion: string;
-}
-
-interface MotivosAusenciaProps {
-    motivos: MotivoAusencia[];
-    loading: boolean;
-    error: string | null;
-}
-
 export default function MotivosAusencia() {
     const { motivos, loading, error } = useMotivosAusencia();
 
