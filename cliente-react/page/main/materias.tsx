@@ -21,7 +21,9 @@ export default function Materias() {
     const [itemsPerPage, setItemsPerPage] = useState<number>(10);
     const [currentPage, setCurrentPage] = useState<number>(1);
 
-    const filtered = materias.filter(e => 
+    const lstmaterias = Array.isArray(materias) ? materias : [];
+
+    const filtered = lstmaterias.filter(e => 
         `${e.nombre} ${e.descripcion}`
             .toLowerCase()
             .includes(searchTerm.trim().toLowerCase())

@@ -12,13 +12,15 @@ interface Reporte {
 
 export default function Reportes() {
 
-    const { alumnos, loading, error } = useReportes();
+    const { reportes, loading, error } = useReportes();
 
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [itemsPerPage, setItemsPerPage] = useState<number>(10);
     const [currentPage, setCurrentPage] = useState<number>(1);
+    
+    const lstreportes = Array.isArray(reportes) ? reportes : [];
 
-    const filtered = alumnos.filter(e => `${e.alumno}`
+    const filtered = lstreportes.filter(e => `${e.alumno}`
         .toLowerCase()
         .includes(searchTerm.trim().toLowerCase())
     )

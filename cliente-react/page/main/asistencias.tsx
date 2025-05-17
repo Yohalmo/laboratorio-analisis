@@ -12,20 +12,22 @@ interface Asistencia {
 }
 
 interface AsistenciasProps {
-    alumnos: Asistencia[],
+    asistencias: Asistencia[],
     loading: boolean,
     error: string | null;
 }
 
 export default function Asistencias() {
 
-    const { alumnos, loading, error } = useAsistencias();
+    const { asistencias, loading, error } = useAsistencias();
 
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [itemsPerPage, setItemsPerPage] = useState<number>(10);
     const [currentPage, setCurrentPage] = useState<number>(1);
+    
+    const lstasistencias = Array.isArray(asistencias) ? asistencias : [];
 
-    const filtered = alumnos.filter(e => `${e.alumno}`
+    const filtered = lstasistencias.filter(e => `${e.alumno}`
         .toLowerCase()
         .includes(searchTerm.trim().toLowerCase())
     )

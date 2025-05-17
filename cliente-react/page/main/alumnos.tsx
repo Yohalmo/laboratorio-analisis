@@ -26,7 +26,9 @@ export default function Alumnos() {
     const [itemsPerPage, setItemsPerPage] = useState<number>(10);
     const [currentPage, setCurrentPage] = useState<number>(1);
 
-    const filtered = alumnos.filter(e => `${e.nombres} ${e.apellidos}`
+    const lstalumnos = Array.isArray(alumnos) ? alumnos : [];
+
+    const filtered = lstalumnos.filter(e => `${e.nombres} ${e.apellidos}`
         .toLowerCase()
         .includes(searchTerm.trim().toLowerCase())
     )

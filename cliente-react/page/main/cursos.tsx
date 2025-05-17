@@ -23,7 +23,9 @@ export default function Cursos() {
     const [itemsPerPage, setItemsPerPage] = useState<number>(10);
     const [currentPage, setCurrentPage] = useState<number>(1);
 
-    const filtered = cursos.filter(e => 
+    const lstcursos = Array.isArray(cursos) ? cursos : [];
+
+    const filtered = lstcursos.filter(e => 
         `${e.nombre} ${e.descripcion} ${e.id_periodo}`
             .toLowerCase()
             .includes(searchTerm.trim().toLowerCase())

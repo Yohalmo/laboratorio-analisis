@@ -20,7 +20,9 @@ export default function MotivosAusencia() {
     const [itemsPerPage, setItemsPerPage] = useState<number>(10);
     const [currentPage, setCurrentPage] = useState<number>(1);
 
-    const filtered = motivos.filter(e => 
+    const lstmotivos = Array.isArray(motivos) ? motivos : [];
+
+    const filtered = lstmotivos.filter(e => 
         e.descripcion.toLowerCase().includes(searchTerm.trim().toLowerCase())
     );
 

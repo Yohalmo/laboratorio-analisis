@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { fetchCliente } from '../../api/fetchCliente';
 
 export function useAsistencias(){
-    const [alumnos, setAlumnos] = useState<any>([]);
+    const [asistencias, setAlumnos] = useState<any>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -15,5 +15,5 @@ export function useAsistencias(){
         .finally(() => setLoading(false));
     }, [])
 
-    return { alumnos, loading, error };
+    return { asistencias, loading, error };
 }
