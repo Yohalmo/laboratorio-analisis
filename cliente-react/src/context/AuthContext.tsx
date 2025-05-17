@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useState, useEffect } from "react";
 import { jwtDecode } from 'jwt-decode';
 
 interface User{
@@ -17,21 +17,18 @@ export const AuthContext = createContext<AuthContextType>(
     {} as AuthContextType
 )
 
-export function AuthProvider({ children }: {children: ReactNode}){
+export function AuthProvider({ children }: {children: React.ReactNode}){
     
     const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
         const token = localStorage.getItem('google_token');
-
         if(token){
             login(token);
         }
     }, []);
 
     function login(token: string){
-        localStorage.setItem('google_token', token);
-
         const decode = jwtDecode<any>(token);
 
         setUser({

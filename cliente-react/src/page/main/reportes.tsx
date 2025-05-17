@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useReportes } from "../../src/hook/useReportes";
-import Paginador from '../../src/components/paginador';
+import { useReportes } from "../../hook/useReportes";
+import Paginador from '../../components/paginador';
 
 export default function Reportes() {
 

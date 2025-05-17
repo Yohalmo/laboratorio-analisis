@@ -1,5 +1,3 @@
-import React from "react";
-
 interface PaginadorProps {
   currentPage: number;
   totalPages: number;
@@ -16,10 +14,10 @@ export default function Paginador({
   setItemsPerPage,
 }: PaginadorProps) {
   return (
-    <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <div>
+    <div className="mt-3 d-flex justify-content-between align-items-center">
+      <div className="d-flex aalig-items-center">
         <label>Mostrar:</label>
-        <select
+        <select className="form-control ms-2"
           value={itemsPerPage}
           onChange={(e) => setItemsPerPage(Number(e.target.value))}
         >
@@ -34,16 +32,15 @@ export default function Paginador({
       </div>
 
       <div>
-        <button
+        <button  className="btn"
           onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
           disabled={currentPage === 1}
         >
           Anterior
         </button>
-        <button
+        <button className="btn ms-3"
           onClick={() => setCurrentPage(Math.min(currentPage + 1, totalPages))}
           disabled={currentPage === totalPages}
-          style={{ marginLeft: '10px' }}
         >
           Siguiente
         </button>

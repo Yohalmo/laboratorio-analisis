@@ -1,20 +1,18 @@
 import { useState, useEffect } from "react";
-import { useMaterias } from "../../src/hook/useMaterias";
-import Paginador from '../../src/components/paginador';
+import { useMotivosAusencia } from "../../hook/useMotivosAusencia";
+import Paginador from '../../components/paginador';
 
-export default function Materias() {
-    const { materias, loading, error } = useMaterias();
+export default function MotivosAusencia() {
+    const { motivos, loading, error } = useMotivosAusencia();
 
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [itemsPerPage, setItemsPerPage] = useState<number>(10);
     const [currentPage, setCurrentPage] = useState<number>(1);
 
-    const lstmaterias = Array.isArray(materias) ? materias : [];
+    const lstmotivos = Array.isArray(motivos) ? motivos : [];
 
-    const filtered = lstmaterias.filter(e => 
-        `${e.nombre} ${e.descripcion}`
-            .toLowerCase()
-            .includes(searchTerm.trim().toLowerCase())
+    const filtered = lstmotivos.filter(e => 
+        e.descripcion.toLowerCase().includes(searchTerm.trim().toLowerCase())
     );
 
     const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
@@ -25,18 +23,18 @@ export default function Materias() {
         setCurrentPage(1);
     }, [searchTerm, itemsPerPage]);
 
-    if (loading) return <p className="text-center">Cargando Materias...</p>;
+    if (loading) return <p className="text-center">Cargando motivos de ausencia...</p>;
     if (error) return <p className="text-center text-danger">{error}</p>;
 
     return (
         <div className="container">
-            <h2 className="my-4">Materias</h2>
+            <h2 className="my-4">Motivos de Ausencia</h2>
 
             <div className="form-group col-md-4 mb-4">
                 <input 
                     type="text" 
                     className="form-control"
-                    placeholder="Buscar por nombre o descripción..."
+                    placeholder="Buscar por descripción..."
                     onChange={e => setSearchTerm(e.target.value)} 
                 />
             </div>
@@ -46,22 +44,20 @@ export default function Materias() {
                     <thead className="thead-dark">
                         <tr>
                             <th>ID</th>
-                            <th>Nombre</th>
                             <th>Descripción</th>
                         </tr>
                     </thead>
                     <tbody>
                         {pageData.length > 0 ? (
                             pageData.map(e => (
-                                <tr key={e.id_materia}>
-                                    <td>{e.id_materia}</td>
-                                    <td>{e.nombre}</td>
+                                <tr key={e.id_motivo}>
+                                    <td>{e.id_motivo}</td>
                                     <td>{e.descripcion}</td>
                                 </tr>
                             ))
                         ) : (
                             <tr>
-                                <td colSpan={3} className="text-center">No se encontraron materias</td>
+                                <td colSpan={2} className="text-center">No se encontraron motivos de ausencia</td>
                             </tr>
                         )}
                     </tbody>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { fetchCliente } from '../../api/fetchCliente';
+import { fetchCliente } from '../api/fetchCliente';
 
 export function useMotivosAusencia() {
     const [motivos, setMotivos] = useState<any>([]);

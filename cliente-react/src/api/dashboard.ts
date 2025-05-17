@@ -1,5 +1,5 @@
 import { fetchCliente } from './fetchCliente';
-import type { DashboardStats} from '../src/types';
+import type { DashboardStats} from '../types';
 
 export const getDashboardStatus = async (): Promise<DashboardStats> => {
     const [totales] = await Promise.all([

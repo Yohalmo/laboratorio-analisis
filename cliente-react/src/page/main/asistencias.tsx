@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useAsistencias } from "../../src/hook/useAsistencias";
-import Paginador from '../../src/components/paginador';
+import { useAsistencias } from "../../hook/useAsistencias";
+import Paginador from '../../components/paginador';
 
 export default function Asistencias() {
 

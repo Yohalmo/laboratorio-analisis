@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useCursos } from "../../src/hook/useCursos";
-import Paginador from '../../src/components/paginador';
+import { useCursos } from "../../hook/useCursos";
+import Paginador from '../../components/paginador';
 
 export default function Cursos() {
     const { cursos, loading, error } = useCursos();

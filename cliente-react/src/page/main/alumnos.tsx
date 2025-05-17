@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useAlumnos } from "../../src/hook/useAlumnos";
-import Paginador from '../../src/components/paginador';
+import { useAlumnos } from "../../hook/useAlumnos";
+import Paginador from '../../components/paginador';
 
 export default function Alumnos() {
 

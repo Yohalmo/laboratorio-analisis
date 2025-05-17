@@ -1,11 +1,10 @@
 const BASE_URL = import.meta.env.VITE_API_URL;
-console.log(BASE_URL);
 
 export async function fetchCliente<T>(
     endpoint:string,
     options: RequestInit = {}
 ): Promise<T> {
-    const response = await fetch(`http://localhost:5000${endpoint}`, {
+    const response = await fetch(`${BASE_URL}${endpoint}`, {
         ...options
     });
 
