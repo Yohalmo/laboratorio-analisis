@@ -25,7 +25,7 @@ export default function TablaResumen({ title, data }: TablaResumenProps) {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={2}>
+                                    <td>
                                         <p className="text-muted text-center">No hay registros recientes</p>
                                     </td>
                                 </tr>
