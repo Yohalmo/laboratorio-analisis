@@ -8,7 +8,6 @@ export default function Dashboard() {
     const [stats, setStats] = useState<DashboardStats | null>(null);
     const [alumnos, setAlumnos] = useState<Alumno[]>([]);
   
-
     useEffect(() => {
         // Tipado explícito en las respuestas
         getDashboardStats().then((data: DashboardStats) => setStats(data));
@@ -27,9 +26,11 @@ export default function Dashboard() {
             </div>
 
             {/* Tablas de Últimos Registros */}
-            <div className="mb-5">
-                <h3 className="mb-3">Últimos Alumnos</h3>
-                <TablaResumen data={alumnos} type="alumnos" />
+            <div className="row">
+                <div className="mb-3 col-xl-6 col-md-6 col-sm-12">
+                    <h3 className="mb-3">Últimos Alumnos</h3>
+                    <TablaResumen data={alumnos} type="alumnos" />
+                </div>
             </div>
 
             

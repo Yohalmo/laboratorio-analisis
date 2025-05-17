@@ -8,8 +8,9 @@ main = Blueprint('alumno_blueprint', __name__)
 
 @main.route("/", methods=['GET'])
 def get_alumnos():
-    try:    
-        alumnos = AlumnoModel.get_all()
+    try:
+        limit = request.args.get('limit', default=0, type=int)
+        alumnos = AlumnoModel.get_all(limit)
         
         if alumnos:
             return jsonify(alumnos), 200
@@ -17,7 +18,6 @@ def get_alumnos():
     except Exception as ex:
         return jsonify({'error' : str(ex)}), 500
     
-
 @main.route("/<id>", methods=['GET'])
 def get_alumno_by_id(id):
     try:
@@ -101,8 +101,6 @@ def update_alumno():
     except Exception as ex:
         return jsonify({'error' : ex}), 500
     
-    
-
 @main.route("/delete/<id>", methods=['DELETE'])
 def delete_alumno(id):
     try:
@@ -112,5 +110,13 @@ def delete_alumno(id):
             return jsonify({ "message" : f"Alumno {id} eliminado" }), 200
         return jsonify({'message' : "Alumno no encontrado"}), 200
 
+    except Exception as ex:
+        return jsonify({'error' : ex}), 500
+
+@main.route("/count", methods=['GET'])
+def count_alumnos():
+    try:
+        count = AlumnoModel.count_alumnos()
+        return jsonify({'count' : count}), 200
     except Exception as ex:
         return jsonify({'error' : ex}), 500
