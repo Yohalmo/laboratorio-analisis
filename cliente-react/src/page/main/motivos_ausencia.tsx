@@ -1,78 +1,121 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useMotivosAusencia } from "../../hook/useMotivosAusencia";
-import Paginador from '../../components/paginador';
+import { fetchCliente } from "../../api/fetchCliente";
+import Paginador from "../../components/paginador";
 
-export default function MotivosAusencia() {
-    const { motivos, loading, error } = useMotivosAusencia();
+const MotivoAusencia = () => {
+  const { motivos, loading, error } = useMotivosAusencia();
+  const [formulario, setFormulario] = useState({
+    descripcion: "",
+  });
+  const [modoEdicion, setModoEdicion] = useState(false);
+  const [motivoEditando, setMotivoEditando] = useState(null);
+  const [paginaActual, setPaginaActual] = useState(1);
 
-    const [searchTerm, setSearchTerm] = useState<string>('');
-    const [itemsPerPage, setItemsPerPage] = useState<number>(10);
-    const [currentPage, setCurrentPage] = useState<number>(1);
+  const porPagina = 5;
+  const motivosPaginados = motivos.slice(
+    (paginaActual - 1) * porPagina,
+    paginaActual * porPagina
+  );
 
-    const lstmotivos = Array.isArray(motivos) ? motivos : [];
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormulario({ ...formulario, [name]: value });
+  };
 
-    const filtered = lstmotivos.filter(e => 
-        e.descripcion.toLowerCase().includes(searchTerm.trim().toLowerCase())
-    );
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (modoEdicion && motivoEditando) {
+        await fetchCliente(`/api/motivos_ausencia/${motivoEditando.id_motivo}`, {
+          method: "PUT",
+          body: formulario,
+        });
+      } else {
+        await fetchCliente("/api/motivos_ausencia", {
+          method: "POST",
+          body: formulario,
+        });
+      }
+      window.location.reload();
+    } catch (error) {
+      alert("Error al guardar el motivo de ausencia");
+    }
+  };
 
-    const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
-    const startIdx = (currentPage - 1) * itemsPerPage;
-    const pageData = filtered.slice(startIdx, startIdx + itemsPerPage);
+  const handleEditar = (motivo) => {
+    setFormulario({ descripcion: motivo.descripcion });
+    setModoEdicion(true);
+    setMotivoEditando(motivo);
+  };
 
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [searchTerm, itemsPerPage]);
+  const handleEliminar = async (id_motivo) => {
+    if (confirm("¿Deseas eliminar este motivo de ausencia?")) {
+      try {
+        await fetchCliente(`/api/motivos_ausencia/${id_motivo}`, {
+          method: "DELETE",
+        });
+        window.location.reload();
+      } catch (error) {
+        alert("Error al eliminar el motivo");
+      }
+    }
+  };
 
-    if (loading) return <p className="text-center">Cargando motivos de ausencia...</p>;
-    if (error) return <p className="text-center text-danger">{error}</p>;
+  return (
+    <div>
+      <h2>Gestión de Motivos de Ausencia</h2>
 
-    return (
-        <div className="container">
-            <h2 className="my-4">Motivos de Ausencia</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="descripcion"
+          value={formulario.descripcion}
+          placeholder="Descripción"
+          onChange={handleChange}
+          required
+        />
+        <button type="submit">
+          {modoEdicion ? "Actualizar" : "Registrar"}
+        </button>
+      </form>
 
-            <div className="form-group col-md-4 mb-4">
-                <input 
-                    type="text" 
-                    className="form-control"
-                    placeholder="Buscar por descripción..."
-                    onChange={e => setSearchTerm(e.target.value)} 
-                />
-            </div>
+      {loading ? (
+        <p>Cargando motivos...</p>
+      ) : error ? (
+        <p>{error}</p>
+      ) : (
+        <>
+          <table>
+            <thead>
+              <tr>
+                <th>Descripción</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {motivosPaginados.map((motivo) => (
+                <tr key={motivo.id_motivo}>
+                  <td>{motivo.descripcion}</td>
+                  <td>
+                    <button onClick={() => handleEditar(motivo)}>Editar</button>
+                    <button onClick={() => handleEliminar(motivo.id_motivo)}>Eliminar</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
-            <div className="table-responsive">
-                <table className="table table-bordered table-hover">
-                    <thead className="thead-dark">
-                        <tr>
-                            <th>ID</th>
-                            <th>Descripción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {pageData.length > 0 ? (
-                            pageData.map(e => (
-                                <tr key={e.id_motivo}>
-                                    <td>{e.id_motivo}</td>
-                                    <td>{e.descripcion}</td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan={2} className="text-center">No se encontraron motivos de ausencia</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
-            
-            {filtered.length > 0 && (
-                <Paginador
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    itemsPerPage={itemsPerPage}
-                    setCurrentPage={setCurrentPage}
-                    setItemsPerPage={setItemsPerPage}
-                />
-            )}
-        </div>
-    )
-}
+          <Paginador
+            total={motivos.length}
+            actual={paginaActual}
+            porPagina={porPagina}
+            cambiarPagina={setPaginaActual}
+          />
+        </>
+      )}
+    </div>
+  );
+};
+
+export default MotivoAusencia;

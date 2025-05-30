@@ -1,90 +1,149 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useCursos } from "../../hook/useCursos";
-import Paginador from '../../components/paginador';
+import { fetchCliente } from "../../api/fetchCliente";
+import Paginador from "../../components/paginador";
 
-export default function Cursos() {
-    const { cursos, loading, error } = useCursos();
+const Curso = () => {
+  const { cursos, loading, error } = useCursos();
+  const [formulario, setFormulario] = useState({
+    nombre: "",
+    descripcion: "",
+    estado: true,
+  });
+  const [modoEdicion, setModoEdicion] = useState(false);
+  const [cursoEditando, setCursoEditando] = useState(null);
+  const [paginaActual, setPaginaActual] = useState(1);
 
-    const [searchTerm, setSearchTerm] = useState<string>('');
-    const [itemsPerPage, setItemsPerPage] = useState<number>(10);
-    const [currentPage, setCurrentPage] = useState<number>(1);
+  const porPagina = 5;
+  const cursosPaginados = cursos.slice(
+    (paginaActual - 1) * porPagina,
+    paginaActual * porPagina
+  );
 
-    const lstcursos = Array.isArray(cursos) ? cursos : [];
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    const val = type === "checkbox" ? checked : value;
+    setFormulario({ ...formulario, [name]: val });
+  };
 
-    const filtered = lstcursos.filter(e => 
-        `${e.nombre} ${e.descripcion} ${e.id_periodo}`
-            .toLowerCase()
-            .includes(searchTerm.trim().toLowerCase())
-    );
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (modoEdicion && cursoEditando) {
+        await fetchCliente(`/api/cursos/${cursoEditando.id_curso}`, {
+          method: "PUT",
+          body: formulario,
+        });
+      } else {
+        await fetchCliente("/api/cursos", {
+          method: "POST",
+          body: formulario,
+        });
+      }
+      window.location.reload(); // actualizar datos
+    } catch (error) {
+      alert("Error al guardar el curso");
+    }
+  };
 
-    const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
-    const startIdx = (currentPage - 1) * itemsPerPage;
-    const pageData = filtered.slice(startIdx, startIdx + itemsPerPage);
+  const handleEditar = (curso) => {
+    setFormulario({
+      nombre: curso.nombre,
+      descripcion: curso.descripcion,
+      estado: curso.estado,
+    });
+    setModoEdicion(true);
+    setCursoEditando(curso);
+  };
 
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [searchTerm, itemsPerPage]);
+  const handleEliminar = async (id_curso) => {
+    if (confirm("¿Deseas eliminar este curso?")) {
+      try {
+        await fetchCliente(`/api/cursos/${id_curso}`, { method: "DELETE" });
+        window.location.reload();
+      } catch (error) {
+        alert("Error al eliminar el curso");
+      }
+    }
+  };
 
-    if (loading) return <p className="text-center">Cargando Cursos...</p>;
-    if (error) return <p className="text-center text-danger">{error}</p>;
+  return (
+    <div>
+      <h2>Gestión de Cursos</h2>
 
-    return (
-        <div className="container">
-            <h2 className="my-4">Cursos</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="nombre"
+          value={formulario.nombre}
+          placeholder="Nombre del curso"
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="descripcion"
+          value={formulario.descripcion}
+          placeholder="Descripción"
+          onChange={handleChange}
+          required
+        />
+        <label>
+          Activo:
+          <input
+            type="checkbox"
+            name="estado"
+            checked={formulario.estado}
+            onChange={handleChange}
+          />
+        </label>
+        <button type="submit">{modoEdicion ? "Actualizar" : "Registrar"}</button>
+      </form>
 
-            <div className="form-group col-md-4 mb-4">
-                <input 
-                    type="text" 
-                    className="form-control"
-                    placeholder="Buscar por nombre, descripción o período..."
-                    onChange={e => setSearchTerm(e.target.value)} 
-                />
-            </div>
+      {loading ? (
+        <p>Cargando cursos...</p>
+      ) : error ? (
+        <p>{error}</p>
+      ) : (
+        <>
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Estado</th>
+                <th>Periodo</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cursosPaginados.map((curso) => (
+                <tr key={curso.id_curso}>
+                  <td>{curso.nombre}</td>
+                  <td>{curso.descripcion}</td>
+                  <td>{curso.estado ? "Activo" : "Inactivo"}</td>
+                  <td>{curso.nombre_periodo}</td>
+                  <td>
+                    <button onClick={() => handleEditar(curso)}>Editar</button>
+                    <button onClick={() => handleEliminar(curso.id_curso)}>Eliminar</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
-            <div className="table-responsive">
-                <table className="table table-bordered table-hover">
-                    <thead className="thead-dark">
-                        <tr>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Descripción</th>
-                            <th>Estado</th>
-                            <th>Período</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {pageData.length > 0 ? (
-                            pageData.map(e => (
-                                <tr key={e.id_curso}>
-                                    <td>{e.id_curso}</td>
-                                    <td>{e.nombre}</td>
-                                    <td>{e.descripcion}</td>
-                                    <td>
-                                        <span className={`badge ${e.estado ? 'bg-success' : 'bg-secondary'}`}>
-                                            {e.estado ? 'Activo' : 'Inactivo'}
-                                        </span>
-                                    </td>
-                                    <td>{e.nombre_periodo}</td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan={5} className="text-center">No se encontraron cursos</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
-            
-            {filtered.length > 0 && (
-                <Paginador
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    itemsPerPage={itemsPerPage}
-                    setCurrentPage={setCurrentPage}
-                    setItemsPerPage={setItemsPerPage}
-                />
-            )}
-        </div>
-    )
-}
+          <Paginador
+            total={cursos.length}
+            actual={paginaActual}
+            porPagina={porPagina}
+            cambiarPagina={setPaginaActual}
+          />
+        </>
+      )}
+    </div>
+  );
+};
+
+export default Curso;
+ 
+

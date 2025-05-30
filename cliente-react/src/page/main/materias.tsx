@@ -1,82 +1,131 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useMaterias } from "../../hook/useMaterias";
-import Paginador from '../../components/paginador';
+import { fetchCliente } from "../../api/fetchCliente";
+import Paginador from "../../components/paginador";
 
-export default function Materias() {
-    const { materias, loading, error } = useMaterias();
+const Materia = () => {
+  const { materias, loading, error } = useMaterias();
+  const [formulario, setFormulario] = useState({
+    nombre: "",
+    descripcion: "",
+  });
+  const [modoEdicion, setModoEdicion] = useState(false);
+  const [materiaEditando, setMateriaEditando] = useState(null);
+  const [paginaActual, setPaginaActual] = useState(1);
 
-    const [searchTerm, setSearchTerm] = useState<string>('');
-    const [itemsPerPage, setItemsPerPage] = useState<number>(10);
-    const [currentPage, setCurrentPage] = useState<number>(1);
+  const porPagina = 5;
+  const materiasPaginadas = materias.slice(
+    (paginaActual - 1) * porPagina,
+    paginaActual * porPagina
+  );
 
-    const lstmaterias = Array.isArray(materias) ? materias : [];
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormulario({ ...formulario, [name]: value });
+  };
 
-    const filtered = lstmaterias.filter(e => 
-        `${e.nombre} ${e.descripcion}`
-            .toLowerCase()
-            .includes(searchTerm.trim().toLowerCase())
-    );
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (modoEdicion && materiaEditando) {
+        await fetchCliente(`/api/materias/${materiaEditando.id_materia}`, {
+          method: "PUT",
+          body: formulario,
+        });
+      } else {
+        await fetchCliente("/api/materias", {
+          method: "POST",
+          body: formulario,
+        });
+      }
+      window.location.reload(); // actualizar datos
+    } catch (error) {
+      alert("Error al guardar la materia");
+    }
+  };
 
-    const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
-    const startIdx = (currentPage - 1) * itemsPerPage;
-    const pageData = filtered.slice(startIdx, startIdx + itemsPerPage);
+  const handleEditar = (materia) => {
+    setFormulario({
+      nombre: materia.nombre,
+      descripcion: materia.descripcion,
+    });
+    setModoEdicion(true);
+    setMateriaEditando(materia);
+  };
 
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [searchTerm, itemsPerPage]);
+  const handleEliminar = async (id_materia) => {
+    if (confirm("¿Deseas eliminar esta materia?")) {
+      try {
+        await fetchCliente(`/api/materias/${id_materia}`, { method: "DELETE" });
+        window.location.reload();
+      } catch (error) {
+        alert("Error al eliminar la materia");
+      }
+    }
+  };
 
-    if (loading) return <p className="text-center">Cargando Materias...</p>;
-    if (error) return <p className="text-center text-danger">{error}</p>;
+  return (
+    <div>
+      <h2>Gestión de Materias</h2>
 
-    return (
-        <div className="container">
-            <h2 className="my-4">Materias</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="nombre"
+          value={formulario.nombre}
+          placeholder="Nombre de la materia"
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="descripcion"
+          value={formulario.descripcion}
+          placeholder="Descripción"
+          onChange={handleChange}
+          required
+        />
+        <button type="submit">{modoEdicion ? "Actualizar" : "Registrar"}</button>
+      </form>
 
-            <div className="form-group col-md-4 mb-4">
-                <input 
-                    type="text" 
-                    className="form-control"
-                    placeholder="Buscar por nombre o descripción..."
-                    onChange={e => setSearchTerm(e.target.value)} 
-                />
-            </div>
+      {loading ? (
+        <p>Cargando materias...</p>
+      ) : error ? (
+        <p>{error}</p>
+      ) : (
+        <>
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {materiasPaginadas.map((materia) => (
+                <tr key={materia.id_materia}>
+                  <td>{materia.nombre}</td>
+                  <td>{materia.descripcion}</td>
+                  <td>
+                    <button onClick={() => handleEditar(materia)}>Editar</button>
+                    <button onClick={() => handleEliminar(materia.id_materia)}>Eliminar</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
-            <div className="table-responsive">
-                <table className="table table-bordered table-hover">
-                    <thead className="thead-dark">
-                        <tr>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Descripción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {pageData.length > 0 ? (
-                            pageData.map(e => (
-                                <tr key={e.id_materia}>
-                                    <td>{e.id_materia}</td>
-                                    <td>{e.nombre}</td>
-                                    <td>{e.descripcion}</td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan={3} className="text-center">No se encontraron materias</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
-            
-            {filtered.length > 0 && (
-                <Paginador
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    itemsPerPage={itemsPerPage}
-                    setCurrentPage={setCurrentPage}
-                    setItemsPerPage={setItemsPerPage}
-                />
-            )}
-        </div>
-    )
-}
+          <Paginador
+            total={materias.length}
+            actual={paginaActual}
+            porPagina={porPagina}
+            cambiarPagina={setPaginaActual}
+          />
+        </>
+      )}
+    </div>
+  );
+};
+
+export default Materia;
