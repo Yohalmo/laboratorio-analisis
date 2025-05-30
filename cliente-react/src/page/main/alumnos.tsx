@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useAlumnos } from "../../hook/useAlumnos";
 import Paginador from '../../components/paginador';
+import type { Alumno } from "../../interfaces/Alumno";
 import { FaTrash } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
-import type { Alumno } from "../../interfaces/Alumno";
 import { toast, ToastContainer } from "react-toastify";
 import { fetchCliente } from "../../api/fetchCliente";
 
@@ -48,7 +48,7 @@ export default function Alumnos() {
                 email: nuevoAlumno.email
             }
 
-            const res = await fetchCliente<Alumno>(`/api/alumnos/add`, {
+            const res = await fetchCliente<{id:string}>(`/api/alumnos/add`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -56,7 +56,7 @@ export default function Alumnos() {
                 body: JSON.stringify(payload)
             })
 
-            setAlumnos(prev => [...prev, { id_alumno: res.id_alumno, ...nuevoAlumno }]);
+            setAlumnos(prev => [...prev, { id_alumno: res.id, ...nuevoAlumno }]);
 
             toast.success('Alumno agregado exitosamente.')
             setShowAddModal(false)

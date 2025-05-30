@@ -4,4 +4,6 @@ export interface Reporte {
     id_reporte: string;
     observaciones: string;
     periodo: string;
+    id_periodo:string;
+    id_alumno:string;
 }
