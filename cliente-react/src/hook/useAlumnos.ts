@@ -15,5 +15,5 @@ export function useAlumnos(){
         .finally(() => setLoading(false));
     }, [])
 
-    return { alumnos, loading, error };
+    return { alumnos, loading, error, setAlumnos };
 }

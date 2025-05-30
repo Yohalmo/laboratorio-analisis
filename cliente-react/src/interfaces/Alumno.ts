@@ -1,5 +1,5 @@
 export interface Alumno {
-    id_alumno: Number,
+    id_alumno: string,
     nombres: String,
     apellidos: String,
     fecha_nacimiento: string
