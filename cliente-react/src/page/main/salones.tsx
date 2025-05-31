@@ -101,6 +101,9 @@ export default function Salones() {
 
     useEffect(() => { setCurrentPage(1); }, [searchTerm, itemsPerPage]);
 
+    if (loading) return <p className="text-center">Cargando Alumnos...</p>;
+    if (error) return <p className="text-center text-danger">{error}...</p>;
+
     return (
         <div className="container">
             <ToastContainer />

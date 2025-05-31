@@ -10,7 +10,7 @@ class TelefonoModel():
 
             with connection.cursor() as cursor:
                 cursor.execute("""
-                            select id_telefono, nombre, numero_telefono, fecha_creacion from telefonos order by id_telefono desc
+                            select id_telefono, nombre, numero_telefono, fecha_creacion, codigo_pais from telefonos order by id_telefono desc
                                """)
                 resultados = cursor.fetchall()
                 
@@ -20,6 +20,7 @@ class TelefonoModel():
                         nombre=row[1],
                         numero_telefono=row[2],
                         fecha_creacion=row[3],
+                        codigo_pais=row[4],
                     )
                     lista_telefonos.append(telefono.to_JSON())
             connection.close()
@@ -35,7 +36,7 @@ class TelefonoModel():
             
             with connection.cursor() as cursor:
                 cursor.execute("""
-                            select id_telefono, nombre, numero_telefono, fecha_creacion from telefonos
+                            select id_telefono, nombre, numero_telefono, fecha_creacion, codigo_pais from telefonos
 							   where id_telefono = %s 
                                """, (telefono_id,))
                 row = cursor.fetchone()
@@ -46,6 +47,7 @@ class TelefonoModel():
                         nombre=row[1],
                         numero_telefono=row[2],
                         fecha_creacion=row[3],
+                        codigo_pais=row[4],
                     )
             connection.close()
             return telefono.to_JSON()
@@ -61,9 +63,9 @@ class TelefonoModel():
 
             with connection.cursor() as cursor:
                 cursor.execute("""
-                                insert into telefonos(id_telefono, fecha_creacion, numero_telefono, nombre)
-                                VALUES (%s, %s, %s, %s)
-                               """, (telefono.id_telefono, telefono.fecha_creacion,  telefono.numero_telefono, telefono.nombre))
+                                insert into telefonos(id_telefono, fecha_creacion, numero_telefono, nombre, codigo_pais)
+                                VALUES (%s, %s, %s, %s, %s)
+                               """, (telefono.id_telefono, telefono.fecha_creacion,  telefono.numero_telefono, telefono.nombre, telefono.codigo_pais))
                 
                 affecte_rows = cursor.rowcount
                 connection.commit()
@@ -81,8 +83,8 @@ class TelefonoModel():
 
             with connection.cursor() as cursor:
                 cursor.execute("""
-                            update telefonos set fecha_creacion = %s, numero_telefono = %s, nombre = %s where id_telefono = %s 
-                               """, (telefono.fecha_creacion, telefono.numero_telefono, telefono.nombre, telefono.id_telefono))
+                            update telefonos set fecha_creacion = %s, numero_telefono = %s, nombre = %s,codigo_pais = %s where id_telefono = %s 
+                               """, (telefono.fecha_creacion, telefono.numero_telefono, telefono.nombre, telefono.codigo_pais, telefono.id_telefono))
                 
                 affecte_rows = cursor.rowcount
                 connection.commit()

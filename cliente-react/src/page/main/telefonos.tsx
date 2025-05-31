@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { useProfesores } from "../../hook/useProfesores";
+import { useTelefonos } from "../../hook/useTelefonos";
 import Paginador from '../../components/paginador';
 import { toast, ToastContainer } from "react-toastify";
 import { fetchCliente } from "../../api/fetchCliente";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import type { Profesor } from "../../interfaces/Profesor";
+import type { Telefono } from "../../interfaces/Telefono";
 
-export default function Profesores() {
-    const { profesores, loading, error, setProfesores } = useProfesores();
+export default function Telefonos() {
+    const { telefonos, loading, error, setTelefonos } = useTelefonos();
 
     const [searchTerm, setSearchTerm] = useState('');
     const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -15,68 +15,70 @@ export default function Profesores() {
 
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
-    const [editRegistro, setEditRegistro] = useState<Profesor | null>(null);
-    const [deleteRegistro, setDeleteRegistro] = useState<Profesor | null>(null);
+    const [editRegistro, setEditRegistro] = useState<Telefono | null>(null);
+    const [deleteRegistro, setDeleteRegistro] = useState<Telefono | null>(null);
 
-    const [nuevoProfesor, setNuevoProfesor] = useState<Profesor>({
-        id_profesor: '',
+    const [nuevoTelefono, setNuevoTelefono] = useState<Telefono>({
+        id_telefono: '',
+        fecha_creacion: '',
+        numero_telefono: '',
         nombre: '',
-        apellido: '',
-        especialidad: '',
-        telefono: '',
-        email: '',
-        documento_identidad: ''
+        codigo_pais: ''
     });
 
-    const validate = (p: Profesor) => {
-        if (!p.nombre.trim()) return 'Nombre es obligatorio';
-        if (!p.apellido.trim()) return 'Apellido es obligatorio';
-        if (!p.especialidad.trim()) return 'Especialidad es obligatoria';
-        if (!p.telefono.trim()) return 'Teléfono es obligatorio';
-        if (!p.email.trim()) return 'Email es obligatorio';
-        if (!p.documento_identidad.trim()) return 'Documento es obligatorio';
+    const validate = (t: Telefono) => {
+        if (!t.nombre.trim()) return 'Nombre es obligatorio';
+        if (!t.numero_telefono.trim()) return 'Número de teléfono es obligatorio';
+        if (!t.codigo_pais.trim()) return 'Código de país es obligatorio';
+        if (!t.fecha_creacion.trim()) return 'Fecha de creación es obligatoria';
         return null;
     };
 
+    const formatDateForBackend = (iso: string): string => {
+        const [y, m, d] = iso.split('-');
+        return `${d}/${m}/${y}`;
+    };
+
     const handleAdd = async () => {
-        const msg = validate(nuevoProfesor);
+        const msg = validate(nuevoTelefono);
         if (msg) return toast.error(msg);
 
         try {
-            const res = await fetchCliente('/api/profesores/add', {
+            nuevoTelefono.fecha_creacion = formatDateForBackend(nuevoTelefono.fecha_creacion);
+
+            const res = await fetchCliente('/api/telefonos/add', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(nuevoProfesor)
+                body: JSON.stringify(nuevoTelefono)
             });
-            setProfesores(prev => [...prev, { ...nuevoProfesor, id_profesor: res.id_profesor }]);
-            toast.success('Profesor agregado');
+            setTelefonos(prev => [...prev, { ...nuevoTelefono, id_telefono: res.id }]);
+            toast.success('Teléfono agregado');
             setShowAddModal(false);
-            setNuevoProfesor({ id_profesor: '', nombre: '', apellido: '', especialidad: '', telefono: '', email: '', documento_identidad: '' });
+            setNuevoTelefono({ id_telefono: '', fecha_creacion: '', numero_telefono: '', nombre: '', codigo_pais: '' });
         } catch {
             toast.error('Error al agregar');
         }
     };
 
-    const openEdit = (profesor: Profesor) => {
-        setEditRegistro(profesor);
+    const openEdit = (t: Telefono) => {
+        setEditRegistro(t);
         setShowEditModal(true);
     };
 
     const handleUpdate = async () => {
         if (!editRegistro) return;
-
         const msg = validate(editRegistro);
         if (msg) return toast.error(msg);
 
         try {
-            await fetchCliente(`/api/profesores/update/${editRegistro.id_profesor}`, {
+            editRegistro.fecha_creacion = formatDateForBackend(editRegistro.fecha_creacion);
+            await fetchCliente(`/api/telefonos/update`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(editRegistro)
             });
-
-            setProfesores(prev => prev.map(p => p.id_profesor === editRegistro.id_profesor ? editRegistro : p));
-            toast.success('Profesor actualizado');
+            setTelefonos(prev => prev.map(t => t.id_telefono === editRegistro.id_telefono ? editRegistro : t));
+            toast.success('Teléfono actualizado');
             setShowEditModal(false);
         } catch {
             toast.error('Error al actualizar');
@@ -85,28 +87,23 @@ export default function Profesores() {
 
     const handleDelete = async () => {
         if (!deleteRegistro) return;
-
         try {
-            await fetchCliente(`/api/profesores/delete/${deleteRegistro.id_profesor}`, {
-                method: 'DELETE'
-            });
-            setProfesores(prev => prev.filter(p => p.id_profesor !== deleteRegistro.id_profesor));
+            await fetchCliente(`/api/telefonos/delete/${deleteRegistro.id_telefono}`, { method: 'DELETE' });
+            setTelefonos(prev => prev.filter(t => t.id_telefono !== deleteRegistro.id_telefono));
             setDeleteRegistro(null);
-            toast.success('Profesor eliminado');
+            toast.success('Teléfono eliminado');
         } catch {
             toast.error('Error al eliminar');
         }
     };
 
-    const lstprofesores = Array.isArray(profesores) ? profesores : [];
-    const filtered = lstprofesores.filter(e => `${e.nombre} ${e.apellido}`.toLowerCase().includes(searchTerm.trim().toLowerCase()));
+    const lsttelefonos = Array.isArray(telefonos) ? telefonos : [];
+    const filtered = lsttelefonos.filter(e => `${e.nombre} ${e.numero_telefono}`.toLowerCase().includes(searchTerm.trim().toLowerCase()));
     const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
     const startIdx = (currentPage - 1) * itemsPerPage;
     const pageData = filtered.slice(startIdx, startIdx + itemsPerPage);
 
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [searchTerm, itemsPerPage]);
+    useEffect(() => { setCurrentPage(1); }, [searchTerm, itemsPerPage]);
 
     if (loading) return <p className="text-center">Cargando Alumnos...</p>;
     if (error) return <p className="text-center text-danger">{error}...</p>;
@@ -114,14 +111,16 @@ export default function Profesores() {
     return (
         <div className="container">
             <ToastContainer />
-            <h2>Profesores</h2>
+            <h2>Teléfonos</h2>
 
-            <div className="d-flex justify-content-between mb-3">
+            <div className="d-flex justify-content-between">
                 <div className="form-group col-3">
                     <input type="text" className="form-control"
                         onChange={e => setSearchTerm(e.target.value)} />
                 </div>
-                <button className="btn btn-primary" onClick={() => setShowAddModal(true)}>
+
+                <button className="btn btn-primary" type="button"
+                    onClick={() => setShowAddModal(true)}>
                     Agregar
                 </button>
             </div>
@@ -130,23 +129,19 @@ export default function Profesores() {
                 <thead>
                     <tr>
                         <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>Especialidad</th>
                         <th>Teléfono</th>
-                        <th>Email</th>
-                        <th>Documento</th>
+                        <th>Código País</th>
+                        <th>Fecha Creación</th>
                         <th>#</th>
                     </tr>
                 </thead>
                 <tbody>
                     {pageData.map(e => (
-                        <tr key={e.id_profesor}>
+                        <tr key={e.id_telefono}>
                             <td>{e.nombre}</td>
-                            <td>{e.apellido}</td>
-                            <td>{e.especialidad}</td>
-                            <td>{e.telefono}</td>
-                            <td>{e.email}</td>
-                            <td>{e.documento_identidad}</td>
+                            <td>{e.numero_telefono}</td>
+                            <td>{e.codigo_pais}</td>
+                            <td>{e.fecha_creacion}</td>
                             <td>
                                 <button className="btn btn-warning me-2" onClick={() => openEdit(e)}><FaEdit /></button>
                                 <button className="btn btn-danger" onClick={() => setDeleteRegistro(e)}><FaTrash /></button>
@@ -156,13 +151,7 @@ export default function Profesores() {
                 </tbody>
             </table>
 
-            <Paginador
-                currentPage={currentPage}
-                totalPages={totalPages}
-                itemsPerPage={itemsPerPage}
-                setCurrentPage={setCurrentPage}
-                setItemsPerPage={setItemsPerPage}
-            />
+            <Paginador {...{ currentPage, totalPages, itemsPerPage, setCurrentPage, setItemsPerPage }} />
 
             {showAddModal && (
                 <div className="modal fade show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
@@ -170,18 +159,18 @@ export default function Profesores() {
                         <div className="modal-content">
                             <form onSubmit={e => { e.preventDefault(); handleAdd(); }}>
                                 <div className="modal-header">
-                                    <h5 className="modal-title">Nuevo Profesor</h5>
+                                    <h5 className="modal-title">Nuevo Teléfono</h5>
                                     <button type="button" className="btn-close" onClick={() => setShowAddModal(false)}></button>
                                 </div>
                                 <div className="modal-body">
-                                    {['nombre', 'apellido', 'especialidad', 'telefono', 'email', 'documento_identidad'].map(campo => (
+                                    {['nombre', 'numero_telefono', 'codigo_pais', 'fecha_creacion'].map(campo => (
                                         <div className="mb-3" key={campo}>
-                                            <label className="form-label">{campo.charAt(0).toUpperCase() + campo.slice(1).replace('_', ' ')}</label>
+                                            <label className="form-label">{campo.replace('_', ' ').toUpperCase()}</label>
                                             <input
-                                                type="text"
+                                                type={campo.includes('fecha') ? 'date' : 'text'}
                                                 className="form-control"
-                                                value={(nuevoProfesor as any)[campo]}
-                                                onChange={e => setNuevoProfesor({ ...nuevoProfesor, [campo]: e.target.value })}
+                                                value={(nuevoTelefono as any)[campo]}
+                                                onChange={e => setNuevoTelefono({ ...nuevoTelefono, [campo]: e.target.value })}
                                                 required
                                             />
                                         </div>
@@ -203,15 +192,15 @@ export default function Profesores() {
                         <div className="modal-content">
                             <form onSubmit={e => { e.preventDefault(); handleUpdate(); }}>
                                 <div className="modal-header">
-                                    <h5 className="modal-title">Editar Profesor</h5>
+                                    <h5 className="modal-title">Editar Teléfono</h5>
                                     <button type="button" className="btn-close" onClick={() => setShowEditModal(false)}></button>
                                 </div>
                                 <div className="modal-body">
-                                    {['nombre', 'apellido', 'especialidad', 'telefono', 'email', 'documento_identidad'].map(campo => (
+                                    {['nombre', 'numero_telefono', 'codigo_pais', 'fecha_creacion'].map(campo => (
                                         <div className="mb-3" key={campo}>
-                                            <label className="form-label">{campo.charAt(0).toUpperCase() + campo.slice(1).replace('_', ' ')}</label>
+                                            <label className="form-label">{campo.replace('_', ' ').toUpperCase()}</label>
                                             <input
-                                                type="text"
+                                                type={campo.includes('fecha') ? 'date' : 'text'}
                                                 className="form-control"
                                                 value={(editRegistro as any)[campo]}
                                                 onChange={e => setEditRegistro({ ...editRegistro, [campo]: e.target.value })}
@@ -235,11 +224,11 @@ export default function Profesores() {
                     <div className="modal-dialog">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title">Eliminar Profesor</h5>
+                                <h5 className="modal-title">Eliminar Teléfono</h5>
                                 <button type="button" className="btn-close" onClick={() => setDeleteRegistro(null)}></button>
                             </div>
                             <div className="modal-body">
-                                ¿Está seguro que desea eliminar al profesor <strong>{deleteRegistro.nombre} {deleteRegistro.apellido}</strong>?
+                                ¿Está seguro que desea eliminar el número <strong>{deleteRegistro.numero_telefono}</strong>?
                             </div>
                             <div className="modal-footer">
                                 <button className="btn btn-secondary" onClick={() => setDeleteRegistro(null)}>Cancelar</button>

@@ -13,6 +13,8 @@ import MotivosAusencia from "../page/main/motivos_ausencia";
 import Periodos from "../page/main/periodos";
 import Profesores from "../page/main/profesores";
 import Salones from "../page/main/salones";
+import Telefonos from "../page/main/telefonos";
+import Notificaciones from "../page/main/notificaciones";
 
 import { PrivateRoute } from "./PrivateRoute";
 
@@ -32,6 +34,8 @@ const AppRoute: React.FC = () => {
         <Route path="/periodos" element={<Periodos />} />
         <Route path="/profesores" element={<Profesores />} />
         <Route path="/salones" element={<Salones />} />
+        <Route path="/telefonos" element={<Telefonos />} />
+        <Route path="/notificaciones" element={<Notificaciones />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

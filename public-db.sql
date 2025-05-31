@@ -219,6 +219,35 @@ CREATE TABLE "public"."salones" (
 -- ----------------------------
 INSERT INTO "public"."salones" VALUES ('9446d95f-2cb7-4ff8-af22-a2d92d7c006b', 'Primer salon', 15, 'Primer edificio', NULL, '2025-05-17 18:45:34.335189');
 
+DROP TABLE IF EXISTS "public"."telefonos";
+CREATE TABLE "public"."telefonos" (
+    id_telefono UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    numero_telefono VARCHAR(20) NOT NULL,
+    nombre VARCHAR(100),
+    codigo_pais VARCHAR(10)
+);
+
+DROP TABLE IF EXISTS "public"."notificaciones";
+CREATE TABLE "public"."notificaciones" (
+  "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
+  "id_alumno" uuid,
+  "fecha_envio" timestamp(6) DEFAULT CURRENT_TIMESTAMP,
+  "estado" varchar(255) not null
+)
+;
+
+-- ----------------------------
+-- Checks structure for table notificaciones
+-- ----------------------------
+ALTER TABLE "public"."notificaciones" ADD CONSTRAINT "notificaciones_estado_check" CHECK (estado = ANY (ARRAY['Pendiente'::text, 'Enviado'::text, 'Fallido'::text]));
+
+-- ----------------------------
+-- Primary Key structure for table notificaciones
+-- ----------------------------
+ALTER TABLE "public"."notificaciones" ADD CONSTRAINT "notificaciones_pkey" PRIMARY KEY ("id");
+
+
 -- ----------------------------
 -- Function structure for uuid_generate_v1
 -- ----------------------------

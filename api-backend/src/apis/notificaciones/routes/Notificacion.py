@@ -86,6 +86,8 @@ def add_notificacion():
 
         for tel in telefonos:
             numero = str(tel.get("numero_telefono", "")).strip()
+            codigo = str(tel.get("codigo_pais", "")).strip()
+
             if not numero:
                 send_results["Número no definido"] = {
                     "status": "Error",
@@ -93,10 +95,11 @@ def add_notificacion():
                 }
                 continue
 
-            if not numero.startswith('+'):
-                phone_number = "+503" + numero
-            else:
-                phone_number = numero
+            if not codigo.startswith('+'):
+                codigo = "+" + codigo
+                
+            phone_number = codigo + numero
+            print(phone_number)
 
             try:
                 sid = send_whatsapp_message(phone_number, message_body)

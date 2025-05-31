@@ -36,7 +36,7 @@ def add_telefono():
     try:
         data = request.get_json()
 
-        required_fields = ['nombre', 'numero_telefono', 'fecha_creacion']
+        required_fields = ['nombre', 'numero_telefono', 'fecha_creacion', 'codigo_pais']
         
         missing_fields = [field for field in required_fields if field not in data]
 
@@ -50,7 +50,8 @@ def add_telefono():
             id_telefono=str(uuid.uuid4()),
             fecha_creacion=fecha_obj,
             nombre=data.get('nombre'),
-            numero_telefono=data.get('numero_telefono')
+            numero_telefono=data.get('numero_telefono'),
+            codigo_pais=data.get('codigo_pais'),
         )
 
         saved = TelefonoModel.add_telefono(telefono)
@@ -84,7 +85,8 @@ def update_telefono():
             id_telefono=data.get('id_telefono'),
             fecha_creacion=fecha_obj,
             nombre=data.get('nombre'),
-            numero_telefono=data.get('numero_telefono')
+            numero_telefono=data.get('numero_telefono'),
+            codigo_pais=data.get('codigo_pais')
         )
 
         saved = TelefonoModel.update_telefono(telefono)

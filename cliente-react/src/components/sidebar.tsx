@@ -53,6 +53,16 @@ export default function Sidebar() {
           className={({ isActive }) => `nav-link ${isActive ? 'active bg-primary text-white' : 'text-dark'} text-decoration-none py-2 px-3 rounded`}>
           Salones
         </NavLink>
+
+        <NavLink to="/telefonos"
+          className={({ isActive }) => `nav-link ${isActive ? 'active bg-primary text-white' : 'text-dark'} text-decoration-none py-2 px-3 rounded`}>
+          Telefonos
+        </NavLink>
+
+        <NavLink to="/notificaciones"
+          className={({ isActive }) => `nav-link ${isActive ? 'active bg-primary text-white' : 'text-dark'} text-decoration-none py-2 px-3 rounded`}>
+          Notificaciones
+        </NavLink>
       </nav>
     </aside>
   );
