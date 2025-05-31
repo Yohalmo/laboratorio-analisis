@@ -1,5 +1,5 @@
 export interface Profesor {
-    id_profesor: number;
+    id_profesor: string;
     nombre: string;
     apellido: string;
     especialidad: string;

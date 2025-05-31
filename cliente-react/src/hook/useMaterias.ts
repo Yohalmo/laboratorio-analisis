@@ -15,5 +15,5 @@ export function useMaterias() {
         .finally(() => setLoading(false));
     }, [])
 
-    return { materias, loading, error };
+    return { materias, loading, error, setMaterias };
 }

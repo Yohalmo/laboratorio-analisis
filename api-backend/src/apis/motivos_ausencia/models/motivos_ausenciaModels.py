@@ -55,9 +55,9 @@ class MotivoAusenciaModel:
             connection = get_connection()
             with connection.cursor() as cursor:
                 cursor.execute("""
-                    INSERT INTO motivos_ausencia (descripcion)
-                    VALUES (%s)
-                """, (motivo.descripcion,))
+                    INSERT INTO motivos_ausencia (id_motivo, descripcion)
+                    VALUES (%s, %s)
+                """, (motivo.id_motivo,  motivo.descripcion))
                 affected_rows = cursor.rowcount
                 connection.commit()
                 return affected_rows

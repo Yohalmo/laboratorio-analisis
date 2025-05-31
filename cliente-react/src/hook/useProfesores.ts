@@ -25,5 +25,5 @@ export function useProfesores() {
             .finally(() => setLoading(false));
     }, []);
 
-    return { profesores, loading, error };
+    return { profesores, loading, error, setProfesores };
 }

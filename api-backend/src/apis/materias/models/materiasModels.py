@@ -59,9 +59,10 @@ class MateriasModel:
             connection = get_connection()
             with connection.cursor() as cursor:
                 cursor.execute("""
-                    INSERT INTO materias (nombre, descripcion)
-                    VALUES (%s, %s)
+                    INSERT INTO materias (id_materia, nombre, descripcion)
+                    VALUES (%s, %s, %s)
                 """, (
+                    materia.id_materia,
                     materia.nombre,
                     materia.descripcion
                 ))

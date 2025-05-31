@@ -24,15 +24,15 @@ export default function Asistencias() {
     const [currentPage, setCurrentPage] = useState<number>(1);
 
     const [showAddModal, setShowAddModal] = useState(false);
+    
+    const [editRegistro, setEditRegistro] = useState<Asistencia | null>(null);
+    const [deleteRegistro, setDeleteRegistro] = useState<Asistencia | null>(null);
     const [nuevoRegistro, setNuevoRegistro] = useState<Asistencia>({
         alumno: '', id_alumno: '', estado: '', fecha: '', materia: '', id_materia: '',
         motivo: '', id_motivo: '', id_asistencia: ''
     });
 
     const [showEditModal, setShowEditModal] = useState(false);
-    const [editRegistro, setEditRegistro] = useState<Asistencia | null>(null);
-
-    const [deleteRegistro, setDeleteRegistro] = useState<Asistencia | null>(null);
 
     const validate = (a: Omit<Asistencia, 'id_asistencia'>) => {
         if (!a.id_alumno) return 'Seleccione un alumno.';

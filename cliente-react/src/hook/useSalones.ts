@@ -23,5 +23,5 @@ export function useSalones() {
             .finally(() => setLoading(false));
     }, []);
 
-    return { salones, loading, error };
+    return { salones, loading, error, setSalones };
 }

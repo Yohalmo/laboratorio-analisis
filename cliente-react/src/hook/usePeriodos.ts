@@ -22,5 +22,5 @@ export function usePeriodos() {
             .finally(() => setLoading(false));
     }, []);
 
-    return { periodos, loading, error };
+    return { periodos, loading, error, setPeriodos };
 }

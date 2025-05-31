@@ -15,5 +15,5 @@ export function useMotivosAusencia() {
         .finally(() => setLoading(false));
     }, [])
 
-    return { motivos, loading, error };
+    return { motivos, loading, error, setMotivos };
 }

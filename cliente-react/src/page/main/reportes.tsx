@@ -331,15 +331,12 @@ export default function Reportes() {
                             <td>{e.observaciones}</td>
                             <td>{e.periodo}</td>
                             <td>
-                                <td>
-                                    <button className="btn btn-warning me-2" onClick={() => openEdit(e)}>
-                                        <FaEdit />
-                                    </button>
-                                    <button className="btn btn-danger" onClick={() => setDeleteReporte(e)}>
-                                        <FaTrash />
-                                    </button>
-                                </td>
-
+                                <button className="btn btn-warning me-2" onClick={() => openEdit(e)}>
+                                    <FaEdit />
+                                </button>
+                                <button className="btn btn-danger" onClick={() => setDeleteReporte(e)}>
+                                    <FaTrash />
+                                </button>
                             </td>
                         </tr>
                     ))}

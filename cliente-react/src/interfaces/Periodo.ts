@@ -1,5 +1,5 @@
 export interface Periodo {
-    id_periodo: number;
+    id_periodo: string;
     nombre: string;
     fecha_inicio: string;
     fecha_finalizacion: string;

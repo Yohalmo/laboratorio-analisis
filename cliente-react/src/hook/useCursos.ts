@@ -15,5 +15,5 @@ export function useCursos() {
         .finally(() => setLoading(false));
     }, [])
 
-    return { cursos, loading, error };
+    return { cursos, loading, error, setCursos };
 }

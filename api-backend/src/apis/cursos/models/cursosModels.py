@@ -62,9 +62,10 @@ class cursosModel:
             connection = get_connection()
             with connection.cursor() as cursor:
                 cursor.execute("""
-                    INSERT INTO cursos (nombre, descripcion, estado, id_periodo)
-                    VALUES (%s, %s, %s, %s)
+                    INSERT INTO cursos (id_curso, nombre, descripcion, estado, id_periodo)
+                    VALUES (%s, %s, %s, %s, %s)
                 """, (
+                    cursos.id_curso,
                     cursos.nombre,
                     cursos.descripcion,
                     cursos.estado,

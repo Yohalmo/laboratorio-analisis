@@ -1,5 +1,5 @@
 export interface Salon {
-    id_salon: number;
+    id_salon: string;
     nombre: string;
     capacidad: number;
     ubicacion: string;

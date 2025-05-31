@@ -38,6 +38,7 @@ def add_materia():
             return jsonify({"error": f"Faltan campos obligatorios: {', '.join(missing_fields)}"}), 400
 
         materia_id = str(uuid.uuid4())
+        
         materia = Materias(
             id_materia=materia_id,
             nombre=data.get('nombre'),

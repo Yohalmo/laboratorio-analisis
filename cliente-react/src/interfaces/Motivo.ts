@@ -1,4 +1,4 @@
 export interface Motivo {
-    id_motivo: number;
+    id_motivo: string;
     descripcion: string;
 }

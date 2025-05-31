@@ -338,8 +338,6 @@ export default function Alumnos() {
                 </div>
             )}
 
-
-
             <h2>Alumnos</h2>
 
             <div className="d-flex justify-content-between">

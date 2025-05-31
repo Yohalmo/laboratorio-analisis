@@ -40,11 +40,12 @@ def add_cursos():
             return jsonify({"error": f"Faltan campos obligatorios: {', '.join(missing_fields)}"}), 400
 
         curso_id = str(uuid.uuid4())
+        estado =  'ACTIVO' if data.get('estado') else 'INACTIVO'
         curso = Curso(
             id_curso=curso_id,
             nombre=data.get('nombre'),
             descripcion=data.get('descripcion'),
-            estado=data.get('estado'),
+            estado=estado,
             id_periodo=data.get('id_periodo'),
         )
         cursosModel.add_curso(curso)
@@ -67,11 +68,13 @@ def update_cursos(id):
         if missing_fields:
             return jsonify({"error": f"Faltan campos obligatorios: {', '.join(missing_fields)}"}), 400
         
+        estado =  'ACTIVO' if data.get('estado') else 'INACTIVO'
+
         curso = Curso(
             id_curso=id,
             nombre=data.get('nombre'),
             descripcion=data.get('descripcion'),
-            estado=data.get('estado'),
+            estado=estado,
             id_periodo=data.get('id_periodo'),
         )
         affected_rows = cursosModel.update_curso(curso)
