@@ -56,7 +56,10 @@ export default function Alumnos() {
                 body: JSON.stringify(payload)
             })
 
-            setAlumnos(prev => [...prev, { id_alumno: res.id, ...nuevoAlumno }]);
+            nuevoAlumno.id_alumno = res.id;
+            console.log(nuevoAlumno);
+
+            setAlumnos(prev => [...prev, {...nuevoAlumno }]);
 
             toast.success('Alumno agregado exitosamente.')
             setShowAddModal(false)
